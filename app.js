@@ -43,7 +43,20 @@ app.post('/delete', (req, res) => {
         requestedUserUniquedId
     )
 
- res.render("home", {data:user});
+ res.render("home", {data:users});
+})
+
+// Update User Route
+app.post('/update', (req, res) => {
+    users. forEach(user => {
+        if(user.userUniqueId === re.body.userUniqueId){
+            user.userName = req.body.userName,
+            user.userEmail = req.body.userEmail,
+            user.userAge = req.body.userAge
+        }
+
+        res.render("home", { data: users});
+    })
 })
 
 // Start the server
