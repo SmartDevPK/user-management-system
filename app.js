@@ -36,6 +36,16 @@ app.post('/', (req, res) => {
     res.render("home", { data: users });
 });
 
+// Delete User Route
+app.post('/delete', (req, res) => {
+    const requestedUserUniquedId = req.body.userUniqueId;
+    users = users.filter( user =>  user.userUniqueId !== 
+        requestedUserUniquedId
+    )
+
+ res.render("home", {data:user});
+})
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
