@@ -38,26 +38,24 @@ app.post('/', (req, res) => {
 
 // Delete User Route
 app.post('/delete', (req, res) => {
-    const requestedUserUniquedId = req.body.userUniqueId;
-    users = users.filter( user =>  user.userUniqueId !== 
-        requestedUserUniquedId
-    )
+    const requestedUserUniqueId = req.body.userUniqueId;
+    users = users.filter(user => user.userUniqueId !== requestedUserUniqueId);
 
- res.render("home", {data:users});
-})
+    res.render("home", { data: users });
+});
 
 // Update User Route
 app.post('/update', (req, res) => {
-    users. forEach(user => {
-        if(user.userUniqueId === re.body.userUniqueId){
-            user.userName = req.body.userName,
-            user.userEmail = req.body.userEmail,
-            user.userAge = req.body.userAge
+    users.forEach(user => {
+        if (user.userUniqueId === req.body.userUniqueId) {
+            user.userName = req.body.userName;
+            user.userEmail = req.body.userEmail;
+            user.userAge = req.body.userAge;
         }
+    });
 
-        res.render("home", { data: users});
-    })
-})
+    res.render("home", { data: users });
+});
 
 // Start the server
 app.listen(PORT, () => {

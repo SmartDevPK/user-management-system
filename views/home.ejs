@@ -1,48 +1,378 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 30px 0 20px 0;
+            font-size: 1.8rem;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s ease;
+        }
+
+        tr:hover td {
+            background-color: #f8f9ff;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Form Styles */
+        form {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input[type="text"]::placeholder {
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        /* Button Styles */
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Delete Button Special Styling */
+        form[action="/delete"] button {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        form[action="/delete"] button:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Update Button Special Styling */
+        form[action="/update"] button {
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+            box-shadow: 0 4px 15px rgba(255, 167, 38, 0.3);
+        }
+
+        form[action="/update"] button:hover {
+            box-shadow: 0 6px 20px rgba(255, 167, 38, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            input[type="text"] {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Loading Animation for Buttons */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Form Grid Layout for Better Organization */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid input {
+            margin-bottom: 0;
+        }
+
+        /* Enhance table responsiveness */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        @media (max-width: 600px) {
+            .table-container {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+                word-break: break-word;
+            }
+        }
+    </style>
+</head>
 <body>
-    <h1>User Management System</h1>
-    <!-- Display Users -->
-    <h2>Current Users</h2>
-    <table border="1">
-        <tr>
-            <th>User Id</th>
-            <th>User Name</th>
-            <th>User Email</th>
-            <th>Age</th>
-            <th>Delete</th>
-        </tr>
-        <% data.forEach(user => { %>
-        <tr>
-            <td><%= user.userUniqueId %></td>
-            <td><%= user.userName %></td>
-            <td><%= user.userEmail %></td>
-            <td><%= user.userAge %></td>
-            <td>
-                <form action="/delete" method="post">
-                    <input type="hidden" name="userUniqueId" value="<%= user.userUniqueId %>">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        <% }) %>
-    </table>
-     <!-- Add User Form -->
-     <h2>Add User</h2>
-     <form action="/" method="post">
-         <input type="text" placeholder="User Unique Id" name="userUniqueId" required>
-         <input type="text" placeholder="User Name" name="userName" required>
-         <input type="text" placeholder="User Email" name="userEmail" required>
-         <input type="text" placeholder="User Age" name="userAge" required>
-         <button type="submit">Submit</button>
-     </form>
-    <!-- Update User Form -->
-    <h2>Update User</h2>
-    <form action="/update" method="post">
-        <input type="text" placeholder="User Unique Id" name="userUniqueId" required>
-        <input type="text" placeholder="User Name" name="userName">
-        <input type="text" placeholder="User Email" name="userEmail">
-        <input type="text" placeholder="User Age" name="userAge">
-        <button type="submit">Update</button>
-    </form>
+    <div class="container">
+        <h1>User Management System</h1>
+        
+        <!-- Display Users -->
+        <h2>Current Users</h2>
+        <div class="table-container">
+            <table border="1">
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>User Email</th>
+                    <th>Age</th>
+                    <th>Delete</th>
+                </tr>
+                <% data.forEach(user => { %>
+                <tr>
+                    <td><%= user.userUniqueId %></td>
+                    <td><%= user.userName %></td>
+                    <td><%= user.userEmail %></td>
+                    <td><%= user.userAge %></td>
+                    <td>
+                        <form action="/delete" method="post">
+                            <input type="hidden" name="userUniqueId" value="<%= user.userUniqueId %>">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+            </table>
+        </div>
+
+        <!-- Add User Form -->
+        <h2>Add User</h2>
+        <form action="/" method="post">
+            <div class="form-grid">
+                <input type="text" placeholder="User Unique Id" name="userUniqueId" required>
+                <input type="text" placeholder="User Name" name="userName" required>
+                <input type="text" placeholder="User Email" name="userEmail" required>
+                <input type="text" placeholder="User Age" name="userAge" required>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Update User Form -->
+        <h2>Update User</h2>
+        <form action="/update" method="post">
+            <div class="form-grid">
+                <input type="text" placeholder="User Unique Id" name="userUniqueId" required>
+                <input type="text" placeholder="User Name" name="userName">
+                <input type="text" placeholder="User Email" name="userEmail">
+                <input type="text" placeholder="User Age" name="userAge">
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add confirmation for delete actions
+            const deleteForms = document.querySelectorAll('form[action="/delete"]');
+            deleteForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const userRow = this.closest('tr');
+                    const userId = userRow.children[0].textContent;
+                    const userName = userRow.children[1].textContent;
+                    
+                    if (confirm(`Are you sure you want to delete user "${userName}" (ID: ${userId})? This action cannot be undone.`)) {
+                        this.submit();
+                    }
+                });
+            });
+
+            // Add loading state to form submissions
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!e.defaultPrevented) {
+                        const submitBtn = this.querySelector('button[type="submit"]');
+                        const originalText = submitBtn.innerHTML;
+                        submitBtn.innerHTML = '<span class="loading"></span>Processing...';
+                        submitBtn.disabled = true;
+                        
+                        // Re-enable after 3 seconds (in case of error)
+                        setTimeout(() => {
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        }, 3000);
+                    }
+                });
+            });
+
+            // Add input validation
+            const emailInputs = document.querySelectorAll('input[placeholder*="Email"]');
+            emailInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (this.value && !emailRegex.test(this.value)) {
+                        this.style.borderColor = '#ff6b6b';
+                        this.style.background = '#ffebee';
+                    } else {
+                        this.style.borderColor = '#e9ecef';
+                        this.style.background = '#f8f9fa';
+                    }
+                });
+            });
+
+            // Add age validation
+            const ageInputs = document.querySelectorAll('input[placeholder*="Age"]');
+            ageInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
